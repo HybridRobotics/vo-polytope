@@ -1,14 +1,13 @@
 import numpy as np
 from ir_sim.world import motion_omni
 from math import sin, cos, atan2
-
 # import cvxpy
 
 
 class obs_circle:
     def __init__(
         self,
-        id=0,
+        index=0,
         state=np.zeros((2, 1)),
         radius=0.2,
         velocity=np.zeros((2, 1)),
@@ -32,13 +31,13 @@ class obs_circle:
         if isinstance(vel_max, list):
             vel_max = np.array(vel_max, ndmin=2).T
 
-        self.id = id
+        self.id = index
         self.state = state
         self.radius = radius
         self.vel_omni = velocity
         self.vel_max = vel_max
         self.step_time = step_time
-        self.obs_model = obs_model  # static, dynamic
+        self.obs_model = obs_model  # static or dynamic
         self.goal = goal
         self.goal_threshold = goal_threshold
         self.radius_collision = round(radius + kwargs.get("radius_exp", 0.1), 2)
@@ -47,9 +46,7 @@ class obs_circle:
         # obstacle model, generalized inequality, Ax >=_k b
         self.A = np.array([[1, 0], [0, 1], [0, 0]])
         self.b = np.row_stack((self.state, self.radius * np.ones((1, 1))))
-        self.b_collision = np.row_stack(
-            (self.state, self.radius_collision * np.ones((1, 1)))
-        )
+        self.b_collision = np.row_stack((self.state, self.radius_collision * np.ones((1, 1))))
 
     def inside(self, point):
 
@@ -142,6 +139,7 @@ class obs_circle:
         for i in range(receding):
             cur_state = motion_omni(cur_state, self.vel_omni, self.step_time)
             pre_array[:, i + 1] = cur_state[:, 0]
+            # the last element is the radius
             b_array[:, i + 1 : i + 2] = np.row_stack(
                 (cur_state, self.radius * np.ones((1, 1)))
             )
@@ -161,29 +159,27 @@ class obs_circle:
     #     return [x, y, vx, vy, radius]
 
     def omni_obs_state(self):
+        """ return x, y, vx, vy, radius """
         rc_array = self.radius * np.ones((1, 1))
         return np.concatenate((self.state, self.vel_omni, rc_array), axis=0)
 
     def omni_state(self):
-
+        """ return x, y, vx, vy, radius, vx_des, vy_des"""
         x = self.state[0, 0]
         y = self.state[1, 0]
-
         vx = self.vel_omni[0, 0]
         vy = self.vel_omni[1, 0]
 
         radius = self.radius_collision
-
         vx_des, vy_des = self.cal_des_vel_omni(self.vel_max)
 
         return [x, y, vx, vy, radius, vx_des, vy_des]
 
     def cal_des_vel_omni(self, v_max):
-
+        """ calculate the velocity to the goal """
         dis, radian = self.relative(self.state, self.goal)
-
         if dis > self.goal_threshold:
-
+            # vx^2 + vy^2 = v_max^2
             vx = v_max[0, 0] * cos(radian)
             vy = v_max[1, 0] * sin(radian)
 
@@ -193,8 +189,9 @@ class obs_circle:
 
         return vx, vy
 
-    def relative(self, state1, state2):
-
+    @staticmethod
+    def relative(state1, state2):
+        """ Calculate the relative position """
         dis = np.sqrt(
             (state1[0, 0] - state2[0, 0]) ** 2 + (state1[1, 0] - state2[1, 0]) ** 2
         )
@@ -202,8 +199,18 @@ class obs_circle:
 
         return dis, radian
 
-    def arrive(self):
+    @staticmethod
+    def wraptopi(radian):
+        # Convert the radian to (-pi, pi)
+        if radian > pi:
+            radian = radian - 2 * pi
+        elif radian < -pi:
+            radian = radian + 2 * pi
 
+        return radian
+
+    def arrive(self):
+        """ Judge if arrive the end_point """
         dist = np.linalg.norm(self.state[0:2] - self.goal[0:2])
 
         if dist < self.goal_threshold:

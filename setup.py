@@ -4,7 +4,7 @@ import sys
 setup(
     name="ir_sim",
     py_modules=["ir_sim"],
-    version="2.0",
+    version="2.1",
     install_requires=[
         "matplotlib",
         "numpy",
@@ -15,5 +15,5 @@ setup(
         "pathlib",
     ],
     description="A simple 2D simulator for the intelligent mobile robots",
-    author="Han Ruihua",
+    author="Han Ruihua, Huang Jihao",
 )
