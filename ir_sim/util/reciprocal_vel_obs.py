@@ -86,7 +86,8 @@ class reciprocal_vel_obs:
         mx, my, mvx, mvy, mr = circular[0:5]
 
         dis_mr = sqrt((my - y) ** 2 + (mx - x) ** 2)
-        angle_mr = atan2(my - y, mx - x)  # y / x return for (-pi, pi)
+        # y / x return for (-pi, pi)
+        angle_mr = atan2(my - y, mx - x)
 
         if dis_mr < r + mr:
             dis_mr = r + mr
@@ -180,8 +181,8 @@ class reciprocal_vel_obs:
 
         for new_vx in np.arange(cur_vx_range[0], cur_vx_range[1], 0.05):
             for new_vy in np.arange(cur_vy_range[0], cur_vy_range[1], 0.05):
-
-                if sqrt(new_vx**2 + new_vy**2) < 0.3:  # ignore small velocity
+                # ignore small velocity
+                if sqrt(new_vx**2 + new_vy**2) < 0.3:
                     continue
 
                 if self.vo_out2(new_vx, new_vy, vo_list):
@@ -477,7 +478,8 @@ class reciprocal_vel_obs:
 
         l0 = (point2 - point1) @ (point2 - point1)
         t = (c_point - point1) @ (point2 - point1) / l0
-        project = point1 + t * (point2 - point1)  # get the project point with min distance
+        # get the project point with min distance
+        project = point1 + t * (point2 - point1)
         distance = sqrt((project - c_point) @ (project - c_point))
         theta1 = atan2((project - c_point)[1], (project - c_point)[0])
         theta2 = atan2(vy, vx)

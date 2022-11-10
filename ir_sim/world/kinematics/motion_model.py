@@ -28,7 +28,8 @@ def motion_diff(current_state, vel, sampletime, noise=False, alpha=None):
     theta = float(wraptopi(current_state[2, 0]))
 
     if omegat >= 0.01 or omegat <= -0.01:
-        ratio = vt / omegat  # Rotation radius
+        # Rotation radius
+        ratio = vt / omegat
         next_state = current_state + np.array([[-ratio * sin(theta) + ratio * sin(theta + omegat * sampletime)],
                                                [ratio * cos(theta) - ratio * cos(theta + omegat * sampletime)],
                                                [omegat * sampletime]])
@@ -38,8 +39,8 @@ def motion_diff(current_state, vel, sampletime, noise=False, alpha=None):
         # move along the straight line, then project the velocity to x_axis, y_axis
         next_state = current_state + np.array([[vt * sampletime * cos(theta)], [vt * sampletime * sin(theta)], [0]])
         distance = vt * sampletime
-
-    next_state[2, 0] = float(wraptopi(next_state[2, 0]))  # convert the theta to (-pi, pi)
+    # convert the theta to (-pi, pi)
+    next_state[2, 0] = float(wraptopi(next_state[2, 0]))
 
     return next_state, distance
 

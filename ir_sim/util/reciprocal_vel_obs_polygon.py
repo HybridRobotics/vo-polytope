@@ -138,11 +138,13 @@ class reciprocal_vel_obs_polygon:
         x, y, theta, vx, vy, r = agent_state[0:6]
         mx, my, mtheta, mvx, mvy, mr = obs_state[0:6]
 
-        if mvx == 0 and mvy == 0:  # for obstacle or static agent
+        # for static agent
+        if mvx == 0 and mvy == 0:
             mode = 'vo'
 
         dis_mr = sqrt((my - y) ** 2 + (mx - x) ** 2)
-        angle_mr = atan2(my - y, mx - x)  # y/x return for (-pi, pi)
+        # y/x return for (-pi, pi)
+        angle_mr = atan2(my - y, mx - x)
 
         if dis_mr < r + mr:
             dis_mr = r + mr
@@ -193,13 +195,16 @@ class reciprocal_vel_obs_polygon:
         x, y, theta, vx, vy, r = agent_state[0:6]
         mx, my, mtheta, mvx, mvy, mr = obs_state[0:6]
 
-        if mvx == 0 and mvy == 0:  # for obstacle
+        # for static robot (has stopped)
+        if mvx == 0 and mvy == 0:
             mode = 'vo'
 
         agent_vertex_num = agent_vertex.shape[1]
         obs_vertex_num = obs_vertex.shape[1]
-        line_left_ori = -np.pi  # big orientation
-        line_right_ori = np.pi  # small orientation
+        # big orientation
+        line_left_ori = -np.pi
+        # small orientation
+        line_right_ori = np.pi
 
         for i in range(agent_vertex_num):
             for j in range(obs_vertex_num):
@@ -314,7 +319,7 @@ class reciprocal_vel_obs_polygon:
         # cur_vy_range = np.array([-self.vymax, self.vymax])
 
         for new_vx in np.arange(cur_vx_range[0], cur_vx_range[1], 0.05):
-            for new_vy in np.arange(cur_vy_range[0], cur_vy_range[1], 0.05):  # 0.05
+            for new_vy in np.arange(cur_vy_range[0], cur_vy_range[1], 0.05):
                 if self.vo_out2(new_vx, new_vy, vo_list):
                     vo_outside.append([new_vx, new_vy])
                 else:
@@ -354,8 +359,9 @@ class reciprocal_vel_obs_polygon:
             temp = min(vo_outside, key=lambda v: reciprocal_vel_obs_polygon.distance(v, vel_des))
             return temp
 
-        else:  # crowded
-            # adjust the weight for time 1 -> 1.2
+        else:
+            # crowded
+            # adjust the weight for time 1 -> 4.0
             # print('environment is crowded!')
             temp = min(vo_inside,
                        key=lambda v: self.penalty(vo_mode, v, vel_des, agent_state, nei_state_list, obs_poly_list,
@@ -372,7 +378,8 @@ class reciprocal_vel_obs_polygon:
             if vo_mode == 'vo':
                 rel_vx = vel[0] - moving[3]
                 rel_vy = vel[1] - moving[4]
-            else:  # for rvo and hrvo, in fact, for hrvo is not suitable
+            else:
+                # for rvo and hrvo, in fact, for hrvo is not suitable
                 rel_vx = 2 * vel[0] - moving[3] - agent_state[3]
                 rel_vy = 2 * vel[1] - moving[4] - agent_state[4]
 
@@ -484,7 +491,8 @@ class reciprocal_vel_obs_polygon:
         # Discriminant of root
         discriminant = b ** 2 - 4 * a * c
 
-        if discriminant < 0:  # Disjoint
+        # Disjoint
+        if discriminant < 0:
             return None
         else:
             # calculate the root
@@ -545,7 +553,8 @@ class reciprocal_vel_obs_polygon:
 
         l0 = (point2 - point1) @ (point2 - point1)
         t = (c_point - point1) @ (point2 - point1) / l0
-        project = point1 + t * (point2 - point1)  # get the project point with min distance
+        # get the project point with min distance
+        project = point1 + t * (point2 - point1)
         distance = sqrt((project - c_point) @ (project - c_point))
         theta1 = atan2((project - c_point)[1], (project - c_point)[0])
         theta2 = atan2(vy, vx)

@@ -46,14 +46,19 @@ def collision_cir_seg(circle, segment):
     """ Collision detection between circle and segment """
     # reference: https://stackoverflow.com/questions/1073336/circle-line-segment-collision-detection-algorithm
 
-    point = np.array([circle.x, circle.y])  # center of a circle
-    sp = np.array([segment[0].x, segment[0].y])  # start_point of segment
-    ep = np.array([segment[1].x, segment[1].y])  # end_point of segment
+    # center of a circle
+    point = np.array([circle.x, circle.y])
+    # start_point of segment
+    sp = np.array([segment[0].x, segment[0].y])
+    # end_point of segment
+    ep = np.array([segment[1].x, segment[1].y])
 
-    l2 = (ep - sp) @ (ep - sp)  # vector dot product
+    # vector dot product
+    l2 = (ep - sp) @ (ep - sp)
 
-    if l2 == 0.0:  # convert to a point
-        distance = np.linalg.norm(point - sp)  # L2-norm
+    # convert to a point
+    if l2 == 0.0:
+        distance = np.linalg.norm(point - sp)
         if distance < circle.r:
             return True
     # cos(\theta)
@@ -63,7 +68,8 @@ def collision_cir_seg(circle, segment):
     projection = sp + t * (ep - sp)
     relative = projection - point
 
-    distance = np.linalg.norm(relative)  # the distance between the center of circle and segment
+    # the distance between the center of circle and segment
+    distance = np.linalg.norm(relative)
     if distance < circle.r:
         return True
 
@@ -105,9 +111,10 @@ def collision_seg_matrix(segment, matrix, reso, offset=np.zeros(2,)):
 
 def collision_circle_point(circle, point_set):
     """ Collision detection between circle and point_set """
-    assert point_set.shape[0] == 2  # the shape of point_set is (2, n)
+    # the shape of point_set is (2, n)
+    assert point_set.shape[0] == 2
 
-    center = np.array([[circle.x], [circle.y]])  # 2*1
+    center = np.array([[circle.x], [circle.y]])
     temp = point_set - center
 
     dis_set = np.linalg.norm(temp, axis=0)
@@ -123,10 +130,12 @@ def collision_rect_point(rectangle, point_set):
     if isinstance(rectangle, list):
         polytope = np.array(rectangle).T
 
+    # polytope in size (2, n)
     ver_num = polytope.shape[1]
-    A, b = gen_matrix(ver_num, polytope)  # polytope in size (2, n)
+    A, b = gen_matrix(ver_num, polytope)
 
-    assert point_set.shape[0] == 2  # point_set in size (2, n)
+    # point_set in size (2, n)
+    assert point_set.shape[0] == 2
     point_num = point_set.shape[1]
     for i in range(point_num):
         if A @ point_num[:, i] <= b:
@@ -198,9 +207,9 @@ def orientation(p, q, r):
 def gen_matrix(ver_num, vertexes):
     """ Get the matrix Ax <= b for polytope, anti-clockwise """
     # vertexes given in (2, n), list in (n, 2)
-    A = np.zeros((ver_num, 2))  # n * 2
-    B = np.zeros((ver_num, 1))  # n * 1
-    B_collision = np.zeros((ver_num, 1))  # n * 1
+    A = np.zeros((ver_num, 2))
+    B = np.zeros((ver_num, 1))
+    B_collision = np.zeros((ver_num, 1))
 
     for i in range(ver_num):
         if i + 1 < ver_num:

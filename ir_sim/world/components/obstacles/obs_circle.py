@@ -1,22 +1,24 @@
 import numpy as np
 from ir_sim.world import motion_omni
-from math import sin, cos, atan2
+from math import sin, cos, atan2, pi
+
+
 # import cvxpy
 
 
 class obs_circle:
     def __init__(
-        self,
-        index=0,
-        state=np.zeros((2, 1)),
-        radius=0.2,
-        velocity=np.zeros((2, 1)),
-        vel_max=2 * np.ones((2, 1)),
-        step_time=0.1,
-        obs_model="static",
-        goal=np.zeros((2, 1)),
-        goal_threshold=0.1,
-        **kwargs
+            self,
+            index=0,
+            state=np.zeros((2, 1)),
+            radius=0.2,
+            velocity=np.zeros((2, 1)),
+            vel_max=2 * np.ones((2, 1)),
+            step_time=0.1,
+            obs_model="static",
+            goal=np.zeros((2, 1)),
+            goal_threshold=0.1,
+            **kwargs
     ):
 
         if isinstance(state, list):
@@ -37,7 +39,8 @@ class obs_circle:
         self.vel_omni = velocity
         self.vel_max = vel_max
         self.step_time = step_time
-        self.obs_model = obs_model  # static or dynamic
+        # static or dynamic
+        self.obs_model = obs_model
         self.goal = goal
         self.goal_threshold = goal_threshold
         self.radius_collision = round(radius + kwargs.get("radius_exp", 0.1), 2)
@@ -63,7 +66,8 @@ class obs_circle:
 
         return self.norm_cone(self.b_collision - self.A @ point)
 
-    def norm_cone(self, matrix):
+    @staticmethod
+    def norm_cone(matrix):
 
         assert matrix.shape == (3, 1)
 
@@ -140,7 +144,7 @@ class obs_circle:
             cur_state = motion_omni(cur_state, self.vel_omni, self.step_time)
             pre_array[:, i + 1] = cur_state[:, 0]
             # the last element is the radius
-            b_array[:, i + 1 : i + 2] = np.row_stack(
+            b_array[:, i + 1: i + 2] = np.row_stack(
                 (cur_state, self.radius * np.ones((1, 1)))
             )
 

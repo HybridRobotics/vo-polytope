@@ -10,19 +10,21 @@ class obs_polygon:
         self.ver_num = None
         self.vertexes = None
         if vertex is not None:
-            self.vertexes = np.array(vertex).T  # convert the shape from (n, 2) to (2, n)
-            self.ver_num = self.vertexes.shape[1]  # get the vertex number
+            # convert the shape from (n, 2) to (2, n)
+            self.vertexes = np.array(vertex).T
+            self.ver_num = self.vertexes.shape[1]
 
         if isinstance(vel, list):
             vel = np.array(vel, ndmin=2).T
         if isinstance(vel_max, list):
-            vel_max = np.array(vel_max, ndmin=2).T  # in shape (2, 1)
+            vel_max = np.array(vel_max, ndmin=2).T
         if isinstance(goal, list):
             goal = np.array(goal, ndmin=2).T
 
         self.safe_distance = safe_margin
         self.vertexes_vector = None
-        self.extended_vertexes = np.ones_like(self.vertexes)  # for constructing VO
+        # for constructing VO for polytopic robots
+        self.extended_vertexes = np.ones_like(self.vertexes)
         self.extended_vertexes_vector = None
 
         self.max_radius = None
@@ -33,7 +35,8 @@ class obs_polygon:
 
         # kinematics
         self.step_time = step_time
-        self.vel = vel  # omni velocity
+        # omni velocity
+        self.vel = vel
         self.vel_max = vel_max
 
         self.goal = goal
@@ -169,9 +172,9 @@ class obs_polygon:
 
     def gen_matrix(self):
         """ Get Ax <= b """
-        self.A = np.zeros((self.ver_num, 2))  # n * 2
-        self.b = np.zeros((self.ver_num, 1))  # n * 1
-        self.b_collision = np.zeros((self.ver_num, 1))  # n * 1
+        self.A = np.zeros((self.ver_num, 2))
+        self.b = np.zeros((self.ver_num, 1))
+        self.b_collision = np.zeros((self.ver_num, 1))
 
         for i in range(self.ver_num):
             if i + 1 < self.ver_num:

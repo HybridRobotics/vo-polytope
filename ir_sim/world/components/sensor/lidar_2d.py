@@ -17,9 +17,7 @@ class lidar2d:
         scan_time=0.1,
         noise=True,
         std=0.2,
-        install_pos=np.zeros(
-            3,
-        ),
+        install_pos=np.zeros(3,),
         **kwargs
     ):
 
