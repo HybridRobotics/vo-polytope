@@ -120,7 +120,7 @@ class Polygon_Robot:
 
         # set the theta as the direction for start to goal
         center_theta = atan2(self.goal[1][0] - center_y, self.goal[0][0] - center_x)
-        self.state = np.array([center_x, center_y, 0], ndmin=2).T
+        self.state = np.array([center_x, center_y, pi], ndmin=2).T
 
     def get_vertex_vector(self):
         """ Get the vertex vertor and the max vector radius (including extended) """

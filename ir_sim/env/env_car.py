@@ -24,7 +24,7 @@ class env_car:
 
         for j in range(self.car_num):
             car = self.car_class(
-                id=j,
+                index=j,
                 shape=car_shape_list[j],
                 init_state=car_state_list[j],
                 goal=car_goal_list[j],

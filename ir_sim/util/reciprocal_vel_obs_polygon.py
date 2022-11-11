@@ -310,13 +310,13 @@ class reciprocal_vel_obs_polygon:
         vo_outside, vo_inside = [], []
 
         # state: [x, y, theta, vx, vy, max_radius, vx_des, vy_des]
-        cur_vx, cur_vy = agent_state[3:5]
-        cur_vx_range = np.clip([cur_vx - self.acceler, cur_vx + self.acceler], -self.vxmax, self.vxmax)
-        cur_vy_range = np.clip([cur_vy - self.acceler, cur_vy + self.acceler], -self.vymax, self.vymax)
+        # cur_vx, cur_vy = agent_state[3:5]
+        # cur_vx_range = np.clip([cur_vx - self.acceler, cur_vx + self.acceler], -self.vxmax, self.vxmax)
+        # cur_vy_range = np.clip([cur_vy - self.acceler, cur_vy + self.acceler], -self.vymax, self.vymax)
 
         # all velocity
-        # cur_vx_range = np.array([-self.vxmax, self.vxmax])
-        # cur_vy_range = np.array([-self.vymax, self.vymax])
+        cur_vx_range = np.array([-self.vxmax, self.vxmax])
+        cur_vy_range = np.array([-self.vymax, self.vymax])
 
         for new_vx in np.arange(cur_vx_range[0], cur_vx_range[1], 0.05):
             for new_vy in np.arange(cur_vy_range[0], cur_vy_range[1], 0.05):

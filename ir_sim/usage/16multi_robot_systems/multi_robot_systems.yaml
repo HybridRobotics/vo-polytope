@@ -4,12 +4,12 @@ world:
   step_time: 0.1
   xy_resolution: 0.01 # meter
   yaw_resolution: 5 # degree
-  world_map: 'map_100_100.png'
+#  world_map: 'map_100_100.png'
 
 robots:
   robot_number: 2
   robot_mode: 'diff'  # omni or diff
-  robot_init_mode: 2 # 0 custom, 1 single row, 2, random, 3 circle
+  robot_init_mode: 3 # 0 custom, 1 single row, 2, random, 3 circle
   init_state_list: [[1, 1, 0], [6, 3, 0]]
   goal_list: [[7, 7, 0], [8, 4, 0]]
   radius_list: [0.2, 0.2]

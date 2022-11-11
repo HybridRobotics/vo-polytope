@@ -18,21 +18,32 @@ class env_obs_cir:
         obs_cir_num=1,
         dist_mode=0,
         step_time=0.1,
-        components=[],
+        components=None,
         **kwargs
     ):
 
+        if components is None:
+            components = []
         self.obs_cir_class = obs_cir_class
+        # 'static' or 'dynamic'
+        self.obs_model = obs_model
         self.obs_num = obs_cir_num
+        # distributed mode
         self.dist_mode = dist_mode
+
         self.obs_cir_list = []
         self.components = components
-        self.obs_model = obs_model  # 'static' 'dynamic'
+
+        # square area: x_min, y_min, x_max, y_max
         self.obs_square = kwargs.get("obs_square", [0, 0, 10, 10])
         self.obs_interval = kwargs.get("obs_interval", 1)
+        self.random_bear = kwargs.get('random_bear', False)
+
+        obs_radius_list = []
+        obs_state_list = []
+        obs_goal_list = []
 
         if self.obs_num > 0:
-
             if self.dist_mode == 0:
                 assert "obs_radius_list" and "obs_state_list" in kwargs.keys()
                 obs_radius_list = kwargs["obs_radius_list"]
@@ -42,7 +53,7 @@ class env_obs_cir:
                 if len(obs_radius_list) < self.obs_num:
                     temp_end = obs_radius_list[-1]
                     obs_radius_list += [
-                        temp_end for i in range(self.obs_num - len(obs_radius_list))
+                        temp_end for _ in range(self.obs_num - len(obs_radius_list))
                     ]
 
             else:
@@ -56,7 +67,7 @@ class env_obs_cir:
 
         for i in range(self.obs_num):
             obs_cir = self.obs_cir_class(
-                id=i,
+                index=i,
                 state=obs_state_list[i],
                 radius=obs_radius_list[i],
                 step_time=step_time,
@@ -67,8 +78,9 @@ class env_obs_cir:
             self.obs_cir_list.append(obs_cir)
 
     def step_wander(self, **kwargs):
-
+        """ Make the obs_cir wander in the world """
         ts = self.obs_total_states()
+        # Get collision avoidance velocity use VO
         rvo_vel_list = list(
             map(lambda agent_s: self.rvo.cal_vel(agent_s, nei_state_list=ts[1]), ts[0])
         )
@@ -81,6 +93,7 @@ class env_obs_cir:
                 arrive_flag = True
 
         if arrive_flag:
+            # reset the goal position
             goal_list = self.random_goal(**kwargs)
 
             for i, obs_cir in enumerate(self.obs_cir_list):
@@ -90,7 +103,7 @@ class env_obs_cir:
         self,
         obs_init_mode=1,
         radius=0.2,
-        circular=[5, 5, 4],
+        circular=None,
         min_radius=0.2,
         max_radius=1,
         **kwargs
@@ -101,14 +114,19 @@ class env_obs_cir:
         # square area: x_min, y_min, x_max, y_max
         # circular area: x, y, radius
 
-        self.random_bear = kwargs.get("random_bear", False)
+        # [x, y, radius]
+        if circular is None:
+            circular = [5, 5, 4]
         random_radius = kwargs.get("random_radius", False)
 
         num = self.obs_num
         state_list, goal_list = [], []
 
         if obs_init_mode == 1:
-            # single row
+            # the obs_cir is generated in a single row
+            # start in y_min, end in y_max
+            # 5 4 3 2 1
+            # 1 2 3 4 5
             state_list = [
                 np.array([[i * self.obs_interval], [self.obs_square[1]]])
                 for i in range(int(self.obs_square[0]), int(self.obs_square[0]) + num)
@@ -150,54 +168,55 @@ class env_obs_cir:
                 low=min_radius, high=max_radius, size=(num,)
             )
         else:
-            radius_list = [radius for i in range(num)]
+            radius_list = [radius for _ in range(num)]
 
         return state_list, goal_list, radius_list
 
     def random_start_goal(self, **kwargs):
-
+        """ Get the start and goal position randomly """
         num = self.obs_num
         random_list = []
-        goal_list = []
+
         while len(random_list) < 2 * num:
 
             new_point = np.random.uniform(
                 low=self.obs_square[0:2], high=self.obs_square[2:4], size=(1, 2)
             ).T
 
-            if not self.check_collision(
+            if not env_obs_cir.check_collision(
                 new_point, random_list, self.components, self.obs_interval
             ):
                 random_list.append(new_point)
 
         start_list = random_list[0:num]
-        goal_list = random_list[num : 2 * num]
+        goal_list = random_list[num: 2 * num]
 
         return start_list, goal_list
 
     def random_goal(self, **kwargs):
-
+        """ Reset the goal position of all robots, to realize wander """
         num = self.obs_num
-        random_list = []
+        goal_list = []
 
-        while len(random_list) < num:
+        while len(goal_list) < num:
 
             new_point = np.random.uniform(
                 low=self.obs_square[0:2], high=self.obs_square[2:4], size=(1, 2)
             ).T
 
-            if not self.check_collision(
-                new_point, random_list, self.components, self.obs_interval
+            if not env_obs_cir.check_collision(
+                new_point, goal_list, self.components, self.obs_interval
             ):
-                random_list.append(new_point)
+                goal_list.append(new_point)
 
-        return random_list
+        return goal_list
 
-    def check_collision(self, check_point, point_list, components, range):
-
+    @staticmethod
+    def check_collision(check_point, point_list, components, obs_range):
+        """ Check collision with the map and other obstacles """
         circle = namedtuple("circle", "x y r")
         point = namedtuple("point", "x y")
-        self_circle = circle(check_point[0, 0], check_point[1, 0], range / 2)
+        self_circle = circle(check_point[0, 0], check_point[1, 0], obs_range / 2)
 
         # check collision with map
         if collision_cir_matrix(
@@ -215,12 +234,13 @@ class env_obs_cir:
                 return True
 
         for point in point_list:
-            if self.distance(check_point, point) < range:
+            if env_obs_cir.distance(check_point, point) < obs_range:
                 return True
 
         return False
 
-    def distance(self, point1, point2):
+    @staticmethod
+    def distance(point1, point2):
         diff = point2[0:2] - point1[0:2]
         return np.linalg.norm(diff)
 

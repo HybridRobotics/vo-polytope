@@ -16,22 +16,22 @@ from matplotlib.patches import Polygon, Circle
 
 class env_plot:
     def __init__(
-        self,
-        width=10,
-        height=10,
-        components=None,
-        full=False,
-        keep_path=False,
-        map_matrix=None,
-        offset_x=0,
-        offset_y=0,
-        **kwargs
+            self,
+            width=10,
+            height=10,
+            components=None,
+            full=False,
+            keep_path=False,
+            map_matrix=None,
+            offset_x=0,
+            offset_y=0,
+            **kwargs
     ):
 
         if components is None:
             components = dict()
-        # self.fig, self.ax = plt.subplots(figsize=(10, 10), dpi=120)
-        self.fig, self.ax = plt.subplots()
+        self.fig, self.ax = plt.subplots(figsize=(10, 10), dpi=120)
+        # self.fig, self.ax = plt.subplots()
 
         self.width = width
         self.height = height
@@ -219,16 +219,16 @@ class env_plot:
             self.ax.plot([obs_line[0], obs_line[2]], [obs_line[1], obs_line[3]], "k-")
 
     def draw_robot(
-        self,
-        robot,
-        robot_color="g",
-        goal_color="r",
-        show_lidar=True,
-        show_goal=True,
-        show_text=True,
-        show_traj=False,
-        traj_type="-",
-        **kwargs
+            self,
+            robot,
+            robot_color="g",
+            goal_color="r",
+            show_lidar=True,
+            show_goal=True,
+            show_text=True,
+            show_traj=False,
+            traj_type="-",
+            **kwargs
     ):
 
         x = robot.state[0][0]
@@ -269,7 +269,6 @@ class env_plot:
 
         if robot.lidar is not None and show_lidar:
             for point in robot.lidar.inter_points[:, :]:
-
                 x_value = [x, point[0]]
                 y_value = [y, point[1]]
 
@@ -286,15 +285,15 @@ class env_plot:
             self.robot_plot_list.append(arrow)
 
     def draw_car(
-        self,
-        car,
-        goal_color="c",
-        goal_l=2,
-        text=False,
-        show_lidar=True,
-        show_traj=False,
-        traj_type="-g",
-        **kwargs
+            self,
+            car,
+            goal_color="c",
+            goal_l=2,
+            text=False,
+            show_lidar=True,
+            show_traj=False,
+            traj_type="-g",
+            **kwargs
     ):
 
         x = car.ang_pos[0, 0]
@@ -355,7 +354,7 @@ class env_plot:
         )
         degree = car.state[2, 0] * 180 / pi
         trans_data = (
-            mtransforms.Affine2D().rotate_deg_around(x, y, degree) + self.ax.transData
+                mtransforms.Affine2D().rotate_deg_around(x, y, degree) + self.ax.transData
         )
         car_img.set_transform(trans_data)
         self.car_img_show_list.append(car_img)
@@ -378,7 +377,6 @@ class env_plot:
 
         if car.lidar is not None and show_lidar:
             for point in car.lidar.inter_points[:, :]:
-
                 x_value = [car.state[0, 0], point[0]]
                 y_value = [car.state[1, 0], point[1]]
 
@@ -416,7 +414,7 @@ class env_plot:
         if show_goal:
             self.ax.add_patch(goal_circle)
             if show_text:
-                self.ax.text(goal_x + 0.4, goal_y - 0.2, 'g' + str(robot.id), fontsize=18, color='k')
+                self.ax.text(goal_x - 0.45, goal_y - 0.3, 'g' + str(robot.id), fontsize=18, color='k')
             self.robot_plot_list.append(goal_circle)
 
         self.ax.add_patch(polygon)
@@ -454,7 +452,6 @@ class env_plot:
     def draw_static_obs_cir(self, obs_cir, obs_cir_color="k", **kwargs):
 
         if obs_cir.obs_model == "static":
-
             x = obs_cir.state[0, 0]
             y = obs_cir.state[1, 0]
 
@@ -533,13 +530,13 @@ class env_plot:
         self.ax.add_patch(arrow)
 
     def draw_trajectory(
-        self,
-        traj,
-        style="g-",
-        label="line",
-        show_direction=False,
-        refresh=False,
-        markersize=2,
+            self,
+            traj,
+            style="g-",
+            label="line",
+            show_direction=False,
+            refresh=False,
+            markersize=2,
     ):
         path_x_list = []
         path_y_list = []
@@ -652,7 +649,6 @@ class env_plot:
         ani.save(name + ".gif", writer="pillow")
 
     # # animation method 2
-    @staticmethod
     def save_gif_figure(self, path, i, fig_format="png"):
 
         if path.exists():
@@ -667,9 +663,8 @@ class env_plot:
             plt.savefig(str(path) + '/' + order + '.' + fig_format, format=fig_format, bbox_inches='tight',
                         pad_inches=0.0)
 
-    @staticmethod
     def create_animate(
-        self, image_path, ani_path, ani_name="animated", keep_len=30, rm_fig_path=True
+            self, image_path, ani_path, ani_name="animated", keep_len=30, rm_fig_path=True
     ):
         """ Get the gif from the figure """
         if not ani_path.exists():
@@ -733,11 +728,9 @@ class env_plot:
     def cla(self):
         self.ax.cla()
 
-    @staticmethod
     def pause(self, time=0.001):
         plt.pause(time)
 
-    @staticmethod
     def show(self):
         plt.show()
 

@@ -9,6 +9,7 @@ for i in range(300):
 
     des_vel_list = [robot.cal_des_vel() for robot in env.robot_list]
 
+    # stop when have a collision
     env.robot_step(des_vel_list)
     env.render()
 

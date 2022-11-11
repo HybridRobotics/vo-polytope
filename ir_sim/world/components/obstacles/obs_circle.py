@@ -1,8 +1,6 @@
 import numpy as np
 from ir_sim.world import motion_omni
 from math import sin, cos, atan2, pi
-
-
 # import cvxpy
 
 

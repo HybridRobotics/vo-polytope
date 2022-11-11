@@ -7,8 +7,8 @@ env = env_base(world_name=world_name, plot=True, init_mode=0, robot_mode="diff")
 # image_path = sys.path[0] + '/' + 'image'
 # gif_path = sys.path[0] + '/' + 'gif'
 
-image_path = Path(__file__).parent / "image"
-gif_path = Path(__file__).parent / "gif"
+image_path = Path(__file__).parent / 'image'
+gif_path = Path(__file__).parent / 'gif'
 
 for i in range(300):
 
@@ -17,5 +17,7 @@ for i in range(300):
 
     env.save_fig(image_path, i)
     env.render()
+    if env.arrive_check():
+        break
 
-env.save_ani(image_path, gif_path)
+env.save_ani(image_path, gif_path, 'test')
