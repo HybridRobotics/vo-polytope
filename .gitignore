@@ -132,3 +132,5 @@ test.py
 _build/
 settings.json
 .vscode/
+
+image/

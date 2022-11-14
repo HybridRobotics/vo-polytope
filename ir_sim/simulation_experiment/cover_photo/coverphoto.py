@@ -18,11 +18,12 @@ for i in range(500):
     env.polygon_robot_step(des_vel_list, vel_type='omni', stop=True)
     env.collision_check()
 
-    # env.save_fig(image_path, i)
+    env.save_fig(image_path, i)
     env.render()
     if env.all_stop_polygon():
         break
 
 
 # env.show()
+# env.save_ani(image_path, gif_path, 'two robot rvo')
 

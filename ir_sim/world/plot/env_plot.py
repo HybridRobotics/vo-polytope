@@ -30,7 +30,7 @@ class env_plot:
 
         if components is None:
             components = dict()
-        self.fig, self.ax = plt.subplots(figsize=(10, 10), dpi=120)
+        self.fig, self.ax = plt.subplots(figsize=(8, 8), dpi=120)
         # self.fig, self.ax = plt.subplots()
 
         self.width = width
@@ -79,13 +79,18 @@ class env_plot:
     def init_plot(self, **kwargs):
         """ Init the figure """
         plt.cla()
+        plt.xticks([])
+        plt.yticks([])
+        plt.axis('off')
         self.ax.set_aspect("equal")
-        self.ax.set_xlim(self.offset_x, self.offset_x + self.width)
-        self.ax.set_ylim(self.offset_y, self.offset_y + self.height)
+
+        # self.ax.set_xlim(self.offset_x, self.offset_x + self.width)
+        # self.ax.set_ylim(self.offset_y, self.offset_y + self.height)
         # self.ax.legend(loc='upper right')
-        self.ax.set_xlabel("x (m)", fontsize=18)
-        self.ax.set_ylabel("y (m)", fontsize=18)
-        self.ax.tick_params(labelsize=18)
+
+        # self.ax.set_xlabel("x (m)", fontsize=18)
+        # self.ax.set_ylabel("y (m)", fontsize=18)
+        # self.ax.tick_params(labelsize=18)
 
         # car image
         current_file_frame = inspect.getfile(inspect.currentframe())
@@ -389,6 +394,7 @@ class env_plot:
 
         # first for extended_vertices
         polygon_extended_vertexes = robot.extended_vertexes.T
+        # need for shape N * 2
         extended_polygon = mpl.patches.Polygon(xy=polygon_extended_vertexes,
                                                color=robot_color, alpha=0.3, linestyle='--')
         extended_polygon.set_zorder(1)
