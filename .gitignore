@@ -133,4 +133,6 @@ _build/
 settings.json
 .vscode/
 
-image/
+# Jihao Adds
+image
+.idea
