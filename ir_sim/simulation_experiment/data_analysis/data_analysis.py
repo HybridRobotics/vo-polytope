@@ -2,17 +2,13 @@ import json
 import numpy as np
 
 robot_num = 8
-approaches = ['polytope_vo', 'polytope_rvo', 'polytope_hrvo', 'circle_vo', 'circle_rvo', 'circle_hrvo']
-average_time = {'polytope_vo': 0, 'polytope_rvo': 0, 'polytope_hrvo': 0, 'circle_vo': 0, 'circle_rvo': 0,
-                'circle_hrvo': 0}
-common_travel_distance = {'polytope_vo': [], 'polytope_rvo': [], 'polytope_hrvo': [], 'circle_vo': [], 'circle_rvo': [],
-                          'circle_hrvo': []}
-mean_travel_distance = {'polytope_vo': [], 'polytope_rvo': [], 'polytope_hrvo': [], 'circle_vo': [], 'circle_rvo': [],
-                        'circle_hrvo': []}
-std_travel_distance = {'polytope_vo': [], 'polytope_rvo': [], 'polytope_hrvo': [], 'circle_vo': [], 'circle_rvo': [],
-                       'circle_hrvo': []}
+approaches = ['polytope_rvo', 'polytope_hrvo', 'circle_rvo', 'circle_hrvo']
+average_time = {'polytope_rvo': 0, 'polytope_hrvo': 0, 'circle_rvo': 0, 'circle_hrvo': 0}
+common_travel_distance = {'polytope_rvo': [], 'polytope_hrvo': [], 'circle_rvo': [], 'circle_hrvo': []}
+mean_travel_distance = {'polytope_rvo': [], 'polytope_hrvo': [], 'circle_rvo': [], 'circle_hrvo': []}
+std_travel_distance = {'polytope_rvo': [], 'polytope_hrvo': [], 'circle_rvo': [], 'circle_hrvo': []}
 
-file_name = 'data/data_analysis1.2/travel_time.json'
+file_name = 'random_text/data_analysis1.2/travel_time.json'
 with open(file_name) as f:
     travel_time = json.load(f)
 

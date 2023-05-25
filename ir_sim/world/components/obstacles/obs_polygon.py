@@ -4,7 +4,7 @@ from ir_sim.world import motion_omni
 
 
 class obs_polygon:
-    def __init__(self, vertex=None, vel=np.zeros((2, 1)), step_time=0.1, goal=np.zeros((2, 1)), goal_threshold=0.1,
+    def __init__(self, index, vertex=None, vel=np.zeros((2, 1)), step_time=0.1, goal=np.zeros((2, 1)), goal_threshold=0.1,
                  obs_model='static', collision_thick=1, vel_max=1.0 * np.ones((2, 1)), safe_margin=0.15, **kwargs):
 
         self.ver_num = None
@@ -21,6 +21,7 @@ class obs_polygon:
         if isinstance(goal, list):
             goal = np.array(goal, ndmin=2).T
 
+        self.id = index
         self.safe_distance = safe_margin
         self.vertexes_vector = None
         # for constructing VO for polytopic robots

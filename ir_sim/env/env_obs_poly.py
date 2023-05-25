@@ -17,6 +17,6 @@ class env_obs_poly:
         # initial all the obs_poly
         self.obs_poly_list = []
         for i in range(obs_poly_num):
-            obs_poly = obs_poly_class(vertex=vertex_list[i], step_time=step_time, goal=goal_list[i],
+            obs_poly = obs_poly_class(index=i, vertex=vertex_list[i], step_time=step_time, goal=goal_list[i],
                                       obs_model=obs_model[i], **kwargs)
             self.obs_poly_list.append(obs_poly)

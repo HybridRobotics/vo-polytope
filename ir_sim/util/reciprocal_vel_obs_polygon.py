@@ -232,7 +232,7 @@ class reciprocal_vel_obs_polygon:
                         line_right_ori = theta
 
         # to reduce computation
-        if reciprocal_vel_obs_polygon.distance([x, y], [x, y]) < r + mr + 0.1:
+        if reciprocal_vel_obs_polygon.distance([x, y], [mx, my]) < r + mr + 0.1:
             # for extended veretxes:
             if collision_polygon_polygon(agent_vertex, obs_vertex):
                 angle_mr = atan2(my - y, mx - x)
@@ -310,13 +310,13 @@ class reciprocal_vel_obs_polygon:
         vo_outside, vo_inside = [], []
 
         # state: [x, y, theta, vx, vy, max_radius, vx_des, vy_des]
-        # cur_vx, cur_vy = agent_state[3:5]
-        # cur_vx_range = np.clip([cur_vx - self.acceler, cur_vx + self.acceler], -self.vxmax, self.vxmax)
-        # cur_vy_range = np.clip([cur_vy - self.acceler, cur_vy + self.acceler], -self.vymax, self.vymax)
+        cur_vx, cur_vy = agent_state[3:5]
+        cur_vx_range = np.clip([cur_vx - self.acceler, cur_vx + self.acceler], -self.vxmax, self.vxmax)
+        cur_vy_range = np.clip([cur_vy - self.acceler, cur_vy + self.acceler], -self.vymax, self.vymax)
 
         # all velocity
-        cur_vx_range = np.array([-self.vxmax, self.vxmax])
-        cur_vy_range = np.array([-self.vymax, self.vymax])
+        # cur_vx_range = np.array([-self.vxmax, self.vxmax])
+        # cur_vy_range = np.array([-self.vymax, self.vymax])
 
         for new_vx in np.arange(cur_vx_range[0], cur_vx_range[1], 0.05):
             for new_vy in np.arange(cur_vy_range[0], cur_vy_range[1], 0.05):
@@ -365,7 +365,7 @@ class reciprocal_vel_obs_polygon:
             # print('environment is crowded!')
             temp = min(vo_inside,
                        key=lambda v: self.penalty(vo_mode, v, vel_des, agent_state, nei_state_list, obs_poly_list,
-                                                  obs_cir_list, 4.0))
+                                                  obs_cir_list, 10.0))
             return temp
 
     def penalty(self, vo_mode, vel, vel_des, agent_state, nei_state_list, obs_poly_list, obs_cir_list, factor):

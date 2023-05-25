@@ -14,6 +14,6 @@ setup(
         "imageio",
         "pathlib",
     ],
-    description="A simple 2D simulator for the intelligent mobile robots and polytopic robots",
-    author="Huang Jihao",
+    description="Velocity Obstacle for Polytopes",
+    author="Huang Jihao, Han Ruihua",
 )

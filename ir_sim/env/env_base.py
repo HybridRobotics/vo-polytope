@@ -17,6 +17,7 @@ from pynput import keyboard
 
 
 class env_base:
+
     def __init__(self, world_name=None, plot=True, **kwargs):
 
         if world_name is not None:
@@ -38,9 +39,7 @@ class env_base:
 
                 # circular-shaped robots
                 self.robots_args = com_list.get("robots", dict())
-                self.robot_number = kwargs.get(
-                    "robot_number", self.robots_args.get("robot_number", 0)
-                )
+                self.robot_number = kwargs.get("robot_number", self.robots_args.get("robot_number", 0))
 
                 # car-like robots
                 self.cars_args = com_list.get("cars", dict())
@@ -123,9 +122,7 @@ class env_base:
             plt.rcParams["keymap.save"].remove("s")
             plt.rcParams["keymap.quit"].remove("q")
 
-            self.key_vel = np.zeros(
-                2,
-            )
+            self.key_vel = np.zeros(2, )
 
             print("start to keyboard control")
             print(
@@ -140,23 +137,19 @@ class env_base:
                 "alt+num: change current control robot id",
             )
 
-            self.listener = keyboard.Listener(
-                on_press=self.on_press, on_release=self.on_release
-            )
+            self.listener = keyboard.Listener(on_press=self.on_press, on_release=self.on_release)
             self.listener.start()
 
         if kwargs.get("mouse", False):
             pass
 
-    def init_environment(
-        self,
-        robot_class=mobile_robot,
-        car_class=car_robot,
-        polygon_robot_class=Polygon_Robot,
-        obs_cir_class=obs_circle,
-        obs_polygon_class=obs_polygon,
-        **kwargs
-    ):
+    def init_environment(self,
+                         robot_class=mobile_robot,
+                         car_class=car_robot,
+                         polygon_robot_class=Polygon_Robot,
+                         obs_cir_class=obs_circle,
+                         obs_polygon_class=obs_polygon,
+                         **kwargs):
 
         # world
         px = int(self.__width / self.xy_reso)
@@ -191,63 +184,66 @@ class env_base:
         self.obs_line_states = self.components["obs_lines"].obs_line_states
 
         # obs_circle
-        self.components["obs_circles"] = env_obs_cir(
-            obs_cir_class=obs_cir_class,
-            obs_cir_num=self.obs_cir_number,
-            step_time=self.step_time,
-            components=self.components,
-            **{**self.obs_cirs_args, **kwargs}
-        )
+        self.components["obs_circles"] = env_obs_cir(obs_cir_class=obs_cir_class,
+                                                     obs_cir_num=self.obs_cir_number,
+                                                     step_time=self.step_time,
+                                                     components=self.components,
+                                                     **{
+                                                         **self.obs_cirs_args,
+                                                         **kwargs
+                                                     })
         self.obs_cir_list = self.components["obs_circles"].obs_cir_list
 
         # obs_polytope
-        self.components["obs_polygons"] = env_obs_poly(
-            obs_poly_class=obs_polygon_class,
-            step_time=self.step_time,
-            vertex_list=self.vertexes_list,
-            obs_poly_num=self.obs_poly_num,
-            **{**self.obs_polygons_args, **kwargs}
-        )
+        self.components["obs_polygons"] = env_obs_poly(obs_poly_class=obs_polygon_class,
+                                                       step_time=self.step_time,
+                                                       vertex_list=self.vertexes_list,
+                                                       obs_poly_num=self.obs_poly_num,
+                                                       **{
+                                                           **self.obs_polygons_args,
+                                                           **kwargs
+                                                       })
         self.obs_poly_list = self.components["obs_polygons"].obs_poly_list
 
         # circular-shaped robots
-        self.components["robots"] = env_robot(
-            robot_class=robot_class,
-            step_time=self.step_time,
-            components=self.components,
-            **{**self.robots_args, **kwargs}
-        )
+        self.components["robots"] = env_robot(robot_class=robot_class,
+                                              step_time=self.step_time,
+                                              components=self.components,
+                                              **{
+                                                  **self.robots_args,
+                                                  **kwargs
+                                              })
         self.robot_list = self.components["robots"].robot_list
 
         # car-like robots
-        self.components["cars"] = env_car(
-            car_class=car_class,
-            car_num=self.car_number,
-            step_time=self.step_time,
-            **{**self.cars_args, **kwargs}
-        )
+        self.components["cars"] = env_car(car_class=car_class,
+                                          car_num=self.car_number,
+                                          step_time=self.step_time,
+                                          **{
+                                              **self.cars_args,
+                                              **kwargs
+                                          })
         self.car_list = self.components["cars"].car_list
 
         # polytopic-shaped robots
-        self.components['polygon_robots'] = env_polygon_robot(
-            polygon_robot_class=polygon_robot_class,
-            components=self.components,
-            step_time=self.step_time,
-            **{**self.polygon_robot_args, **kwargs}
-        )
+        self.components['polygon_robots'] = env_polygon_robot(polygon_robot_class=polygon_robot_class,
+                                                              components=self.components,
+                                                              step_time=self.step_time,
+                                                              **{
+                                                                  **self.polygon_robot_args,
+                                                                  **kwargs
+                                                              })
         self.polygon_robot_list = self.components['polygon_robots'].robot_list
 
         # self.components['grid_map'] = env_grid(grid_map_matrix=kwargs.get('grid_map_matrix', None))
 
         if self.plot:
-            self.world_plot = env_plot(
-                self.__width,
-                self.__height,
-                self.components,
-                offset_x=self.offset_x,
-                offset_y=self.offset_y,
-                **kwargs
-            )
+            self.world_plot = env_plot(self.__width,
+                                       self.__height,
+                                       self.components,
+                                       offset_x=self.offset_x,
+                                       offset_y=self.offset_y,
+                                       **kwargs)
 
         self.time = 0
 
@@ -377,9 +373,7 @@ class env_base:
                 for i, robot in enumerate(self.components["robots"].robot_list):
                     robot.move_forward(vel_list[i], **kwargs)
         else:
-            self.components["robots"].robot_list[robot_id - 1].move_forward(
-                vel_list, **kwargs
-            )
+            self.components["robots"].robot_list[robot_id - 1].move_forward(vel_list, **kwargs)
 
         for robot in self.components["robots"].robot_list:
             robot.cal_lidar_range(self.components)
@@ -393,9 +387,7 @@ class env_base:
                 for i, car in enumerate(self.components["cars"].car_list):
                     car.move_forward(vel_list[i], **kwargs)
         else:
-            self.components["cars"].car_list[car_id - 1].move_forward(
-                vel_list, **kwargs
-            )
+            self.components["cars"].car_list[car_id - 1].move_forward(vel_list, **kwargs)
 
         for car in self.components["cars"].car_list:
             car.cal_lidar_range(self.components)
@@ -428,14 +420,10 @@ class env_base:
             vel_list = []
         if self.obs_step_mode == "default":
             if obs_id is None:
-                for i, obs_cir in enumerate(
-                    self.components["obs_circles"].obs_cir_list
-                ):
+                for i, obs_cir in enumerate(self.components["obs_circles"].obs_cir_list):
                     obs_cir.move_forward(vel_list[i], **kwargs)
             else:
-                self.components["obs_circles"].obs_cir_list[obs_id - 1].move_forward(
-                    vel_list, **kwargs
-                )
+                self.components["obs_circles"].obs_cir_list[obs_id - 1].move_forward(vel_list, **kwargs)
 
         elif self.obs_step_mode == "wander":
             # rvo
@@ -451,7 +439,7 @@ class env_base:
         self.world_plot.init_plot()
         self.components['polygon_robots'].robots_reset(reset_mode)
 
-    def render(self, time=0.05, **kwargs):
+    def render(self, time=0.01, **kwargs):
 
         if self.plot:
             self.world_plot.com_cla()
@@ -521,9 +509,7 @@ class env_base:
         self.world_plot.save_gif_figure(path, i)
 
     def save_ani(self, image_path, ani_path, ani_name="animated", **kwargs):
-        self.world_plot.create_animate(
-            image_path, ani_path, ani_name=ani_name, **kwargs
-        )
+        self.world_plot.create_animate(image_path, ani_path, ani_name=ani_name, **kwargs)
 
     def show(self, **kwargs):
         self.world_plot.draw_dyna_components(**kwargs)

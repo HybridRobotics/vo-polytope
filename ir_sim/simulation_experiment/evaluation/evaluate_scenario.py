@@ -1,5 +1,8 @@
 import sys
 from pathlib import Path
+
+root_path = '/home/hjh/ir-sim'
+sys.path.append(root_path)
 from ir_sim.env import env_base
 
 
@@ -13,8 +16,8 @@ gif_path = Path(__file__).parent / 'gif'
 for i in range(500):
     env.obs_polys_step()
 
-    des_vel_list = env.get_vo_list_polygon('polytope_vo')
-    print(des_vel_list)
+    des_vel_list = env.get_vo_list_polygon('circle_vo')
+    # print(des_vel_list)
     env.polygon_robot_step(des_vel_list, vel_type='omni', stop=True)
     env.collision_check()
 

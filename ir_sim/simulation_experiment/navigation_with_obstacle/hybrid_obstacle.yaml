@@ -27,7 +27,7 @@ polygon_robots:
                           ]
   circular: [5, 5, 4]
   vector_size: 0.8
-  safe_margin: 0.15
+  safe_margin: 0.10
 
 obs_polygons:
   number: 4

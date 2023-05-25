@@ -1,5 +1,9 @@
 import sys
+import time
 from pathlib import Path
+
+root_path = '/home/hjh/ir-sim'
+sys.path.append(root_path)
 from ir_sim.env import env_base
 
 
@@ -11,6 +15,7 @@ gif_path = Path(__file__).parent / 'gif'
 
 # commit: you could adjust the initial orientation of the robot in the code to make the action more reasonable
 for i in range(500):
+    start = time.time()
     env.obs_polys_step()
 
     des_vel_list = env.get_vo_list_polygon('polytope_rvo')
@@ -23,6 +28,7 @@ for i in range(500):
     if env.all_stop_polygon():
         break
 
+    end = time.time()
 
 # env.show()
 # env.save_ani(image_path, gif_path, 'two robot rvo')

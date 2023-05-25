@@ -55,6 +55,10 @@ class env_plot:
         self.lidar_line_list = []
         self.car_img_show_list = []
         self.line_list = []
+
+        # for static obstacle text
+        self.static_obstacle_list = []
+
         # add all dynamic obstacles
         self.dyna_obs_plot_list = []
 
@@ -79,18 +83,37 @@ class env_plot:
     def init_plot(self, **kwargs):
         """ Init the figure """
         plt.cla()
-        plt.xticks([])
-        plt.yticks([])
-        plt.axis('off')
         self.ax.set_aspect("equal")
 
-        # self.ax.set_xlim(self.offset_x, self.offset_x + self.width)
-        # self.ax.set_ylim(self.offset_y, self.offset_y + self.height)
+        # # no ticks
+        # plt.xticks([])
+        # plt.yticks([])
+        # plt.axis('off')
+
+        # set the text in Times New Roman
+        config = {
+            "font.family": 'serif',
+            "font.serif": ['Times New Roman'],
+            "mathtext.fontset": 'stix',
+        }
+        plt.rcParams.update(config)
+
+        self.ax.set_xlim(self.offset_x, self.offset_x + self.width)
+        self.ax.set_ylim(self.offset_y, self.offset_y + self.height)
         # self.ax.legend(loc='upper right')
 
-        # self.ax.set_xlabel("x (m)", fontsize=18)
-        # self.ax.set_ylabel("y (m)", fontsize=18)
-        # self.ax.tick_params(labelsize=18)
+        # set the label in Times New Roman and size
+        label_font = {'family': 'Times New Roman',
+                      'weight': 'normal',
+                      'size': 20,
+                      }
+        self.ax.set_xlabel('x (m)', label_font)
+        self.ax.set_ylabel("y (m)", label_font)
+
+        # set the tick in Times New Roman and size
+        self.ax.tick_params(labelsize=20)
+        labels = self.ax.get_xticklabels() + self.ax.get_yticklabels()
+        [label.set_fontname('Times New Roman') for label in labels]
 
         # car image
         current_file_frame = inspect.getfile(inspect.currentframe())
@@ -169,6 +192,8 @@ class env_plot:
         if obs_polys is not None:
             self.draw_dyna_obs_polygons(obs_polys, **kwargs)
 
+        self.draw_static_obstacle_text()
+
     def draw_robots(self, robots, **kwargs):
         if len(robots.robot_list) > 1:
             for robot, color in zip(robots.robot_list, self.color_list):
@@ -190,10 +215,10 @@ class env_plot:
 
         if len(polygon_robots.robot_list) > 1:
             for robot, color in zip(polygon_robots.robot_list, self.color_list):
-                self.draw_polygon(robot, robot_color=color, **kwargs)
+                self.draw_polygon_robot(robot, robot_color=color, **kwargs)
         else:
             for robot in polygon_robots.robot_list:
-                self.draw_polygon(robot, **kwargs)
+                self.draw_polygon_robot(robot, **kwargs)
 
     def draw_obs_cirs(self, param, param1):
         pass
@@ -389,8 +414,18 @@ class env_plot:
                     self.ax.plot(x_value, y_value, color="b", alpha=0.5)
                 )
 
-    def draw_polygon(self, robot, robot_color='g', goal_color='r', show_lidar=True, show_goal=True, show_text=True,
-                     show_traj=True, traj_type='-', show_margin=False, show_previous=False, **kwargs):
+    def draw_polygon_robot(self,
+                           robot,
+                           robot_color='g',
+                           goal_color='r',
+                           show_lidar=True,
+                           show_goal=True,
+                           show_text=True,
+                           show_traj=True,
+                           traj_type='-',
+                           show_margin=False,
+                           show_previous=False,
+                           **kwargs):
 
         # first for extended_vertices
         polygon_extended_vertexes = robot.extended_vertexes.T
@@ -414,13 +449,32 @@ class env_plot:
 
         goal_x = robot.goal[0, 0]
         goal_y = robot.goal[1, 0]
-        goal_circle = Circle(xy=(goal_x, goal_y), radius=0.1, color=robot_color, alpha=0.8)
-        goal_circle.set_zorder(1)
+        goal_circle = Circle(xy=(goal_x, goal_y), radius=0.15, color=robot_color, alpha=1.0)
+        goal_circle.set_zorder(3)
 
         if show_goal:
+            position_text = 'x'
             self.ax.add_patch(goal_circle)
             if show_text:
-                self.ax.text(goal_x - 0.45, goal_y - 0.3, 'g' + str(robot.id), fontsize=18, color='k')
+                if goal_x <= 5.0:
+                    if goal_y <= 5.0:
+                        # 0.5 0.8
+                        if robot.id == 0:
+                            self.ax.text(goal_x - 0.7, goal_y - 0.75, fr'$\rm{position_text}_{{{str(robot.id)}}}^{{goal}}$', fontsize=24, color='k')
+                        else:
+                            self.ax.text(goal_x - 1.0, goal_y - 0.9, fr'$\rm{position_text}_{{{str(robot.id)}}}^{{goal}}$', fontsize=24, color='k')
+                    else:
+                        # 0.5 0.5
+                        self.ax.text(goal_x - 0.6, goal_y + 0.35, fr'$\rm{position_text}_{{{str(robot.id)}}}^{{goal}}$', fontsize=24, color='k')
+                elif goal_x > 5.0:
+                    if goal_y < 5.0:
+                        # 0.21 0.35
+                        self.ax.text(goal_x + 0.3, goal_y - 0.35, fr'$\rm{position_text}_{{{str(robot.id)}}}^{{goal}}$', fontsize=24, color='k')
+                    else:
+                        # 0.21 0.35
+                        self.ax.text(goal_x + 0.3, goal_y + 0.35, fr'$\rm{position_text}_{{{str(robot.id)}}}^{{goal}}$', fontsize=24, color='k')
+                # # old display
+                # self.ax.text(goal_x - 0.55, goal_y - 0.55, fr'$\rm{position_text}_{{{str(robot.id)}}}^{{goal}}$', fontsize=20, color='k')
             self.robot_plot_list.append(goal_circle)
 
         self.ax.add_patch(polygon)
@@ -435,7 +489,9 @@ class env_plot:
             self.robot_plot_list.append(previous_polygon)
 
         if show_text:
-            self.ax.text(x - 0.75, y + 0.15, 'r' + str(robot.id), fontsize=18, color='k')
+            # 'r' + str(robot.id)
+            text = 'R'
+            self.ax.text(x - 0.85, y + 0.45, fr'$\rm{text}_{{{robot.id}}}$', fontsize=24, color='k')
 
         if show_traj:
             x_list = [robot.previous_state[0, 0], robot.state[0, 0]]
@@ -495,8 +551,10 @@ class env_plot:
             if show_margin:
                 self.ax.add_patch(extended_obs_poly)
 
-    def draw_dyna_obs_polygon(self, obs_polygon, obs_polygon_color='k', show_margin=False, show_previous=True,
-                              **kwargs):
+            self.static_obstacle_list.append(obs_polygon)
+
+    def draw_dyna_obs_polygon(self, obs_polygon, obs_polygon_color='k', show_margin=False, show_previous=False,
+                              show_traj=True, **kwargs):
         if obs_polygon.obs_model != 'static':
             obs_poly = Polygon(obs_polygon.vertexes.T, color=obs_polygon_color)
             obs_poly.set_zorder(2)
@@ -522,8 +580,26 @@ class env_plot:
                 self.ax.add_patch(previous_obs_poly)
                 self.dyna_obs_plot_list.append(previous_obs_poly)
 
-            self.ax.text(obs_polygon.center_point[0][0] - 0.3, obs_polygon.center_point[1][0] + 0.45,
-                         'dyna_obs', fontsize=16, color='k')
+            if show_traj:
+                x_list = [obs_polygon.previous_state[0, 0], obs_polygon.center_point[0, 0]]
+                y_list = [obs_polygon.previous_state[1, 0], obs_polygon.center_point[1, 0]]
+                self.ax.plot(x_list, y_list, linestyle=':', marker='.', color=obs_polygon_color, markersize=5)
+
+            obstacle_text = 'O'
+            self.ax.text(obs_polygon.center_point[0][0] - 0.25,
+                         obs_polygon.center_point[1][0] + 0.45,
+                         fr'$\rm{obstacle_text}_{str(obs_polygon.id)}$',
+                         fontsize=20,
+                         color='k')
+
+    def draw_static_obstacle_text(self):
+        obstacle_text = 'O'
+        for obs_polygon in self.static_obstacle_list:
+            self.ax.text(obs_polygon.center_point[0][0] - 1.1,
+                         obs_polygon.center_point[1][0] + 0.7, # 0.8
+                         fr'$\rm{obstacle_text}_{str(obs_polygon.id)}$',
+                         fontsize=20,
+                         color='k')
 
     # def draw_obs_line_list(self, **kwargs):
 
@@ -659,13 +735,13 @@ class env_plot:
 
         if path.exists():
             order = str(i).zfill(3)
-            # plt.savefig(str(path) + "/" + order + "." + fig_format, format=format)
+            # plt.savefig(str(path) + "/" + order + "." + fig_format, format=fig_format)
             plt.savefig(str(path) + '/' + order + '.' + fig_format, format=fig_format, bbox_inches='tight',
                         pad_inches=0.0)
         else:
             path.mkdir()
             order = str(i).zfill(3)
-            # plt.savefig(str(path) + "/" + order + "." + fig_format, format=format)
+            # plt.savefig(str(path) + "/" + order + "." + fig_format, format=fig_format)
             plt.savefig(str(path) + '/' + order + '.' + fig_format, format=fig_format, bbox_inches='tight',
                         pad_inches=0.0)
 
