@@ -13,7 +13,8 @@ setup(
         "pynput",
         "imageio",
         "pathlib",
+        "cvxpy",
     ],
     description="Velocity Obstacle for Polytopes",
-    author="Huang Jihao, Han Ruihua",
+    author="Huang Jihao",
 )
