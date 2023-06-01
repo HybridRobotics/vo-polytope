@@ -53,7 +53,6 @@ python ir_sim/simulation_experiment/naviagtion_with_robots/multi_polytopic_robot
 python ir_sim/simulation_experiment/naviagtion_with_robots/image_to_mp4.py
 ```
 
-
 ## Contact
 
 Huang Jihao (jihaoh@zju.edu.cn)  
@@ -74,6 +73,4 @@ If you find this code or paper is helpful, you can **star** this repository and 
   pages={3502-3509},
   doi={10.1109/LRA.2023.3269295}
 }
-
-
 ```
