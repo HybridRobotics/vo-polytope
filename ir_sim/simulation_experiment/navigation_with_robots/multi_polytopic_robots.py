@@ -1,6 +1,7 @@
 import sys
 from pathlib import Path
 
+# need to change according your computer, add absolute path: 'xx/ir_sim'
 root_path = '/home/hjh/ir-sim'
 sys.path.append(root_path)
 from ir_sim.env import env_base
@@ -23,7 +24,6 @@ for i in range(500):
     env.render()
     if env.all_stop_polygon():
         break
-
 
 env.show()
 

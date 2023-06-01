@@ -16,6 +16,7 @@ gif_path = Path(__file__).parent / 'gif'
 for i in range(500):
     env.obs_polys_step()
 
+    # change 'polytope_vo' to see different results
     des_vel_list = env.get_vo_list_polygon('circle_vo')
     # print(des_vel_list)
     env.polygon_robot_step(des_vel_list, vel_type='omni', stop=True)
