@@ -71,5 +71,5 @@ python ir_sim/simulation_experiment/naviagtion_with_robots/image_to_mp4.py
 ```
 
 ## Contact
-Huang Jihao (jihaoh@zju.edu.cn)  
-Zeng Jun (zengjunsjtu@berkeley.edu)
+Jihao Huang (jihaoh@zju.edu.cn)  
+Jun Zeng (zengjunsjtu@berkeley.edu)
