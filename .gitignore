@@ -132,3 +132,12 @@ test.py
 _build/
 settings.json
 .vscode/
+
+# Jihao Adds
+image
+media
+.idea
+usage
+code_test
+random_test
+.mp4

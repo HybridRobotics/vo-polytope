@@ -9,6 +9,8 @@ from ir_sim.world.components.sensor.lidar_2d import lidar2d
 
 from ir_sim.world.components.robot.mobile_robot import mobile_robot
 from ir_sim.world.components.robot.car_robot import car_robot
+from ir_sim.world.components.robot.polygon_robot import Polygon_Robot
 
 from ir_sim.world.components.obstacles.obs_circle import obs_circle
 from ir_sim.world.components.obstacles.obs_polygon import obs_polygon
+from ir_sim.world.components.obstacles.obs_line import obs_line

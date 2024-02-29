@@ -7,15 +7,7 @@ from math import sqrt, pi, cos, sin
 # r: 1
 
 
-def range_seg_matrix(
-    segment,
-    matrix,
-    reso,
-    point_step_weight=2,
-    offset=np.zeros(
-        2,
-    ),
-):
+def range_seg_matrix(segment, matrix, reso, point_step_weight=2, offset=np.zeros(2,),):
 
     if matrix is None:
         return False, None, None
@@ -54,11 +46,7 @@ def range_seg_matrix(
     return False, None, None
 
 
-def range_cir_seg(
-    circle,
-    r,
-    segment,
-):
+def range_cir_seg(circle, r, segment):
     # reference: https://stackoverflow.com/questions/1073336/circle-line-segment-collision-detection-algorithm
 
     sp = segment[0]
@@ -88,7 +76,7 @@ def range_cir_seg(
         #       ->  o                     o ->              | -> |
         # FallShort (t1>1,t2>1), Past (t1<0,t2<0), CompletelyInside(t1<0, t2>1)
 
-        if t1 >= 0 and t1 <= 1:
+        if 0 <= t1 <= 1:
             int_point = sp + t1 * d
             lrange = np.linalg.norm(int_point - sp)
 
@@ -121,7 +109,7 @@ def range_seg_seg(segment1, segment2):
             lrange = 0
             return True, int_point, lrange
 
-        elif min(t0, t1) >= 0 and min(t0, t1) <= 1:
+        elif 0 <= min(t0, t1) <= 1:
             int_point = p + min(t0, t1) * r
             lrange = np.linalg.norm(int_point - p)
             return True, int_point, lrange
@@ -138,7 +126,7 @@ def range_seg_seg(segment1, segment2):
         t = np.cross(q - p, s) / np.cross(r, s)
         u = np.cross(q - p, r) / np.cross(r, s)
 
-        if t >= 0 and t <= 1 and u >= 0 and u <= 1:
+        if 0 <= t <= 1 and 0 <= u <= 1:
 
             int_point = p + t * r
             lrange = np.linalg.norm(int_point - p)
