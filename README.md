@@ -1,7 +1,24 @@
-# Velocity Obstacle for Polytope
+# Velocity Obstacle for Polytopic Collision Avoidance for Distributed Multi-Robot Systems
 The source code of the paper "Velocity Obstacle for Polytopic Collision Avoidance for Distributed Multi-Robot Systems" [**RA-Letter**] 
 
 | **[`PDF_IEEE`](https://ieeexplore.ieee.org/document/10106436?source=authoralert)** | **[`PDF_Arxiv`](https://arxiv.org/pdf/2304.07954.pdf)** | **[`Video_Youtube`](https://www.youtube.com/watch?v=YT9aObT2VAo)** | 
+
+## Citation
+
+If you find this code or paper is helpful, you can **star** this repository and cite our paper by the following **BibTeX** entry:
+
+```
+@article{huang2023velocity,
+  author={Huang, Jihao and Zeng, Jun and Chi, Xuemin and Sreenath, Koushil and Liu, Zhitao and Su, Hongye},
+  journal={IEEE Robotics and Automation Letters}, 
+  title={Velocity Obstacle for Polytopic Collision Avoidance for Distributed Multi-Robot Systems}, 
+  year={2023},
+  volume={8},
+  number={6},
+  pages={3502-3509},
+  doi={10.1109/LRA.2023.3269295}
+}
+```
 
 ## Prerequisite
 - numpy
@@ -54,23 +71,5 @@ python ir_sim/simulation_experiment/naviagtion_with_robots/image_to_mp4.py
 ```
 
 ## Contact
-
 Huang Jihao (jihaoh@zju.edu.cn)  
 Zeng Jun (zengjunsjtu@berkeley.edu)
-
-## Citation
-
-If you find this code or paper is helpful, you can **star** this repository and cite our paper by the following **BibTeX** entry:
-
-```
-@ARTICLE{10106436,
-  author={Huang, Jihao and Zeng, Jun and Chi, Xuemin and Sreenath, Koushil and Liu, Zhitao and Su, Hongye},
-  journal={IEEE Robotics and Automation Letters}, 
-  title={Velocity Obstacle for Polytopic Collision Avoidance for Distributed Multi-Robot Systems}, 
-  year={2023},
-  volume={8},
-  number={6},
-  pages={3502-3509},
-  doi={10.1109/LRA.2023.3269295}
-}
-```
