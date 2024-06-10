@@ -28,8 +28,8 @@ If you find this code or paper is helpful, you can **star** this repository and 
 
 ## Installation 
 ```
-git clone https://github.com/junzengx14/ir-sim
-cd ir-sim
+git clone https://github.com/junzengx14/vo-polytope.git
+cd vo-polytope
 pip install -e .  
 ```
 
