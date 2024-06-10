@@ -2,8 +2,8 @@ from setuptools import setup
 import sys
 
 setup(
-    name="ir_sim",
-    py_modules=["ir_sim"],
+    name="vo_polytope",
+    py_modules=["vo_polytope"],
     version="1.0",
     install_requires=[
         "matplotlib",
