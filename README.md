@@ -19,6 +19,8 @@ If you find this code or paper is helpful, you can **star** this repository and 
   doi={10.1109/LRA.2023.3269295}
 }
 ```
+## Acknowledgments
+This work is developed based on the **[`intelligent-robot-simulator.`](https://github.com/hanruihua/intelligent-robot-simulator)**
 
 ## Prerequisite
 - numpy
