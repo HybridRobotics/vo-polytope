@@ -23,9 +23,15 @@ If you find this code or paper is helpful, you can **star** this repository and 
 This work is developed based on the **[`intelligent-robot-simulator.`](https://github.com/hanruihua/intelligent-robot-simulator)**
 
 ## Prerequisite
-- numpy
+- numpy v1.26.4
 - cvxpy
-- matplotlib
+- matplotlib v3.5.1
+
+If TrueType fonts are missing, you can install them as follows (it is required to clear the cache afterwards):
+```
+sudo apt install ttf-mscorefonts-installer
+rm ~/.cache/matplotlib -rf
+```
 
 
 ## Installation 
@@ -38,13 +44,13 @@ pip install -e .
 ## Run examples
 ### Navigation with robots
 ```
-python vo_polytope/simulation_experiment/naviagtion_with_robots/multi_polytopic_robots.py
+python vo_polytope/simulation_experiment/navigation_with_robots/multi_polytopic_robots.py
 ```
 You can change the number or shape of robots in 'robot_world.yaml'.
 
 ### Navigation with robots and obstacles
 ```
-python vo_polytope/simulation_experiment/naviagtion_with_obstacles/naviagtion_with_obstacles.py
+python vo_polytope/simulation_experiment/navigation_with_obstacles/navigation_with_obstacles.py
 ```
 You can switch the yaml file to see different scenarios, such as 'hybrid_obstacle.yaml' (include both dynamic and static obstacles) or 'dynamic_obstacle.yaml' (only include dynamic obstacles).
 
@@ -68,8 +74,8 @@ You can change in 'polygon_world.yaml' to get different results. (such as size)
 ## Save multimedia file
 If you want to save multimedia file, you first need to save the fig, and then call 'image_to_mp4.py', for example:
 ```
-python vo_polytope/simulation_experiment/naviagtion_with_robots/multi_polytopic_robots.py
-python vo_polytope/simulation_experiment/naviagtion_with_robots/image_to_mp4.py
+python vo_polytope/simulation_experiment/navigation_with_robots/multi_polytopic_robots.py
+python vo_polytope/simulation_experiment/navigation_with_robots/image_to_mp4.py
 ```
 
 ## Contact

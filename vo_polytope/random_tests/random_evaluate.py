@@ -3,8 +3,8 @@ import time
 import json
 import sys
 
-root_path = '/home/hjh/ir-sim/vo_polytope'
-sys.path.append(root_path)
+root_path = Path(__file__).resolve().parents[2]
+sys.path.append(str(root_path))
 from vo_polytope.env import env_base
 
 world_name = 'polygon_world.yaml'

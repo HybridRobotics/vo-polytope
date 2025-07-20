@@ -6,8 +6,8 @@ setup(
     py_modules=["vo_polytope"],
     version="1.0",
     install_requires=[
-        "matplotlib",
-        "numpy",
+        "matplotlib==3.5.1",
+        "numpy==1.26.4",
         "scipy",
         "pyyaml",
         "pynput",

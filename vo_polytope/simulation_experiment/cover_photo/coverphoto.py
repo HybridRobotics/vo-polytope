@@ -2,10 +2,9 @@ import sys
 import time
 from pathlib import Path
 
-root_path = '/home/hjh/ir-sim/vo_polytope'
-sys.path.append(root_path)
+root_path = Path(__file__).resolve().parents[3]
+sys.path.append(str(root_path))
 from vo_polytope.env import env_base
-
 
 world_name = 'coverphoto.yaml'
 env = env_base(world_name=world_name, plot=True)

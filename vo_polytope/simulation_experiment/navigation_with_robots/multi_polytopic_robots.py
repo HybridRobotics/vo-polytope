@@ -1,9 +1,8 @@
 import sys
 from pathlib import Path
 
-# need to change according your computer, add absolute path: 'xx/vo_polytope'
-root_path = '/home/hjh/ir-sim/vo_polytope'
-sys.path.append(root_path)
+root_path = Path(__file__).resolve().parents[3]
+sys.path.append(str(root_path))
 from vo_polytope.env import env_base
 
 world_name = 'robot_world.yaml'
